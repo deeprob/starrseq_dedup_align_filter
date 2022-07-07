@@ -1,0 +1,9 @@
+/data5/deepro/starrseq/main_library/1_dedup_align_filter/data/meta/metadata.json input
+/data5/deepro/starrseq/main_library/1_dedup_align_filter/data/meta/metadata.json control 
+/data5/deepro/starrseq/main_library/1_dedup_align_filter/data/meta/metadata.json 16p12.1
+/data5/deepro/starrseq/main_library/1_dedup_align_filter/data/meta/metadata.json atf2
+/data5/deepro/starrseq/main_library/1_dedup_align_filter/data/meta/metadata.json ctcf
+/data5/deepro/starrseq/main_library/1_dedup_align_filter/data/meta/metadata.json foxa1
+/data5/deepro/starrseq/main_library/1_dedup_align_filter/data/meta/metadata.json lef1
+/data5/deepro/starrseq/main_library/1_dedup_align_filter/data/meta/metadata.json scrt1
+/data5/deepro/starrseq/main_library/1_dedup_align_filter/data/meta/metadata.json tcf7l2
