@@ -61,11 +61,6 @@ def get_deduped_files(lib_pre, lib_rep, lib_pairs, lib_umi_idx, lib_suff, outfil
     for rep in lib_rep_list:
         lib_read1_path, lib_read2_path, lib_umi_path = starmap(get_read_file, [(lib_pre, rep, i, lib_suff) for i in [lib_pair_list[0], lib_pair_list[1], lib_umi_idx]])
         lib_read1_outpath, lib_read2_outpath = starmap(get_read_file, [(outfile_pre, rep, i, outfile_suf) for i in [lib_pair_list[0], lib_pair_list[1]]])
-        # lib_read1_path = f'{"_".join([lib_pre, rep, lib_pair_list[0]])}{lib_suff}'
-        # lib_read2_path = f'{"_".join([lib_pre, rep, lib_pair_list[1]])}{lib_suff}'
-        # lib_umi_path = f'{"_".join([lib_pre, rep, lib_umi_idx])}{lib_suff}'
-        # lib_read1_outpath = f'{"_".join([outfile_pre, rep, lib_pair_list[0]])}{outfile_suf}'
-        # lib_read2_outpath = f'{"_".join([outfile_pre, rep, lib_pair_list[1]])}{outfile_suf}'
         os.makedirs(os.path.dirname(outfile_pre), exist_ok=True)
         get_deduped_files_helper(lib_read1_path, lib_read2_path, lib_umi_path, lib_read1_outpath, lib_read2_outpath)
     return
