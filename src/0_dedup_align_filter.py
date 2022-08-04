@@ -4,15 +4,16 @@ import utils as ut
 
 
 def main(
+    raw_dir, library_short,
     library_prefix, library_replicates, library_read_pairs, library_umi_index, library_suffix,
-    reference_genome, roi_file,
+    reference_genome, roi_file, store_dir,
     dedup_flag=True, align_flag=True, filter_flag=True
     ):
     """
     Deduplicate, align and filter starrseq reads
     """
-    # initialize running prefix and suffix
-    library_running_prefix, library_running_suffix = library_prefix, library_suffix
+    # initialize running prefix and suffix:: running prefix has dir struture along with filename prefix
+    library_running_prefix, library_running_suffix = os.path.join(raw_dir, library_short, library_prefix), library_suffix
     
     # Deduplication
     # deduplicate only if there is an umi flag
@@ -20,7 +21,7 @@ def main(
     if library_umi_index:
         umi_flag = True
         # get deduped prefix and suffix
-        library_deduped_prefix, library_deduped_suffix = ut.get_analyzed_filename_prefix_suffix(library_prefix, "deduped")
+        library_deduped_prefix, library_deduped_suffix = ut.get_analyzed_filename_prefix_suffix(store_dir, library_short, library_prefix, "deduped")
         # deduplicate
         if dedup_flag:
             # use starrdust to remove duplicates
@@ -31,7 +32,7 @@ def main(
     
     # Alignment
     # get aligned prefix and suffix
-    library_aligned_prefix, library_aligned_suffix = ut.get_analyzed_filename_prefix_suffix(library_prefix, "aligned")
+    library_aligned_prefix, library_aligned_suffix = ut.get_analyzed_filename_prefix_suffix(store_dir, library_short, library_prefix, "aligned")
     # align
     if align_flag:
         ut.align_reads(
@@ -42,7 +43,7 @@ def main(
     
     # Filtration
     # get filtered prefix and suffix
-    library_filtered_prefix, library_filtered_suffix = ut.get_analyzed_filename_prefix_suffix(library_prefix, "filtered")
+    library_filtered_prefix, library_filtered_suffix = ut.get_analyzed_filename_prefix_suffix(store_dir, library_short, library_prefix, "filtered")
     # filter
     if filter_flag:
         ut.filter_reads(
@@ -56,6 +57,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="STARRSeq analysis")
     parser.add_argument("meta_file", type=str, help="The meta json filepath where library information is stored, look at $prepare meta$ package")
     parser.add_argument("lib", type=str, help="The library name as given in the meta file, this will run dedup, align and filter")
+    parser.add_argument("raw_dir", type=str, help="Dir where raw data is stored")
+    parser.add_argument("store_dir", type=str, help="Dir where analyzed data will be stored")
     parser.add_argument("-d", "--dedup", action="store_false", help="Do not run the deduplication pipeline")
     parser.add_argument("-a", "--align", action="store_false", help="Do not run the alignment pipeline")
     parser.add_argument("-f", "--filter", action="store_false", help="Do not run the filter pipeline")
@@ -64,6 +67,8 @@ if __name__ == "__main__":
     cli_args = parser.parse_args()
     lib_args = ut.create_args(cli_args.meta_file, cli_args.lib)
     main(
+        cli_args.raw_dir,
+        lib_args.library_short,
         lib_args.library_prefix, 
         lib_args.library_reps, 
         lib_args.library_pair,
@@ -71,7 +76,8 @@ if __name__ == "__main__":
         lib_args.library_suffix,
         lib_args.reference_genome,
         lib_args.roi_file,
+        cli_args.store_dir,
         cli_args.dedup,
         cli_args.align,
-        cli_args.filter
+        cli_args.filter,
         )

@@ -9,7 +9,7 @@
 #SBATCH --chdir /data5/deepro/starrseq/main_library/1_dedup_align_filter/src
 #SBATCH -o /data5/deepro/starrseq/main_library/1_dedup_align_filter/slurm/logs/out_%a.log
 #SBATCH -e /data5/deepro/starrseq/main_library/1_dedup_align_filter/slurm/logs/err_%a.log
-#SBATCH --array 4-9%3
+#SBATCH --array 3
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -29,7 +29,7 @@ unset __conda_setup
 conda activate starrseq
 
 echo `date` starting job on $HOSTNAME
-LINE=$(sed -n "$SLURM_ARRAY_TASK_ID"p /data5/deepro/starrseq/main_library/1_dedup_align_filter/slurm/data/smap.txt)
+LINE=$(sed -n "$SLURM_ARRAY_TASK_ID"p /data5/deepro/starrseq/main_library/1_dedup_align_filter/slurm/files/0_smap.txt)
 
 echo $LINE
 python /data5/deepro/starrseq/main_library/1_dedup_align_filter/src/0_dedup_align_filter.py $LINE

@@ -31,7 +31,7 @@ done
 for rep in "${BIOL_REPS[@]}" # ${AR[0]}
 do
     # align reads
-    bwa mem -t ${THREADS} -v 2 ${REF_GENOME} ${INPUT_PREFIX}_${rep}_${PAIRS[0]}_${SUFFIX} ${INPUT_PREFIX}_${rep}_${PAIRS[1]}_${SUFFIX} > ${OUTPUT_PREFIX}_${rep}.sam
+    bwa mem -t ${THREADS} -v 2 ${REF_GENOME} ${INPUT_PREFIX}_${rep}_${PAIRS[0]}${SUFFIX} ${INPUT_PREFIX}_${rep}_${PAIRS[1]}${SUFFIX} > ${OUTPUT_PREFIX}_${rep}.sam
     # convert sam to bam
     samtools sort -@ ${THREADS} -o ${OUTPUT_PREFIX}_${rep}.bam ${OUTPUT_PREFIX}_${rep}.sam 
     # delete the sam file, takes up too much space
