@@ -10,29 +10,27 @@ set -ue
 # $ bash filter_reads.sh -i "/data5/deepro/starrseq/miseq_test/aligned_reads/input" -r "S1" -o "/data5/deepro/starrseq/miseq_test/filtered_libraries/input" -d false
 
 # get all arguments
-while getopts i:r:o:d:f: flag
+while getopts i:r:o:f: flag
 do
     case "${flag}" in
         i) INPUT_PREFIX=${OPTARG};;
         r) BIOL_REPS=(${OPTARG});;
         o) OUTPUT_PREFIX=${OPTARG};;
         f) ROI_FILE=${OPTARG};;
-        d) FLAG_DUP=${OPTARG};;
     esac
 done
 
 for rep in "${BIOL_REPS[@]}"
 do
-    # mark duplicates using picard if this option is true: step 1
-    if [ $FLAG_DUP == true ]
+
+    if [ -z $ROI_FILE]
     then
-        picard MarkDuplicates -I ${INPUT_PREFIX}_${rep}.bam -O ${OUTPUT_PREFIX}_${rep}_dup.bam -M ${OUTPUT_PREFIX}_${rep}_dup_metrics.txt --VALIDATION_STRINGENCY LENIENT --REMOVE_DUPLICATES true --VERBOSITY WARNING
-        # use samtools to filter, get only the regions of interests, filter options taken directly from starrpeaker github page: step 2
-        samtools view -F 3852 -f 2 -q 30 -L ${ROI_FILE} -o ${OUTPUT_PREFIX}_${rep}.bam ${OUTPUT_PREFIX}_${rep}_dup.bam 
+        samtools index ${INPUT_PREFIX}_${rep}.bam
+        samtools view -F 2828 -f 2 -q 30 -o ${OUTPUT_PREFIX}_${rep}.bam ${INPUT_PREFIX}_${rep}.bam chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX chrY
     else
-        echo "Duplicates removed by the user"
-        samtools view -F 2828 -f 2 -q 30 -L ${ROI_FILE} -o ${OUTPUT_PREFIX}_${rep}.bam ${INPUT_PREFIX}_${rep}.bam 
-    fi 
+        samtools index ${INPUT_PREFIX}_${rep}.bam
+        samtools view -F 2828 -f 2 -q 30 -L ${ROI_FILE} -o ${OUTPUT_PREFIX}_${rep}.bam ${INPUT_PREFIX}_${rep}.bam chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX chrY
+    fi
 
 done
 

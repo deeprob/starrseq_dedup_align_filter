@@ -38,7 +38,12 @@ def create_args(meta_file, lib_name):
 
 def get_analyzed_filename_prefix_suffix(store_dir, lib_short, lib_prefix, analysis):
     lib_prefix_formatted = os.path.join(store_dir, analysis, lib_short, lib_prefix)
-    suffix_dict = {"deduped": ".fastq", "aligned": ".bam", "filtered": ".bam"}
+    suffix_dict = {
+        "deduped_starrdust": ".fastq", 
+        "deduped_picard": ".bam", 
+        "aligned": ".bam", 
+        "filtered": ".bam"
+        }
     lib_suffix_formatted = suffix_dict[analysis]
     return lib_prefix_formatted, lib_suffix_formatted
 
@@ -46,11 +51,12 @@ def get_analyzed_filename_prefix_suffix(store_dir, lib_short, lib_prefix, analys
 # deduplication helpers #
 #########################
 
-def get_deduped_files_helper(read1, read2, umi, read1_out, read2_out, mapq_r1=30, mapq_r2=30, min_length_r1=100, min_length_r2=100):
+### starrdust deduplication tool ###
+def get_deduped_files_helper_starrdust(read1, read2, umi, read1_out, read2_out, mapq_r1=30, mapq_r2=30, min_length_r1=100, min_length_r2=100):
     sd.starrdust(read1, read2, umi, mapq_r1, mapq_r2, min_length_r1, min_length_r2, None, read1_out, read2_out)
     return
 
-def get_deduped_files(lib_pre, lib_rep, lib_pairs, lib_umi_idx, lib_suff, outfile_pre, outfile_suf):
+def get_deduped_files_starrdust(lib_pre, lib_rep, lib_pairs, lib_umi_idx, lib_suff, outfile_pre, outfile_suf):
     lib_rep_list = lib_rep.split()
     lib_pair_list = lib_pairs.split()
 
@@ -62,16 +68,40 @@ def get_deduped_files(lib_pre, lib_rep, lib_pairs, lib_umi_idx, lib_suff, outfil
         lib_read1_path, lib_read2_path, lib_umi_path = starmap(get_read_file, [(lib_pre, rep, i, lib_suff) for i in [lib_pair_list[0], lib_pair_list[1], lib_umi_idx]])
         lib_read1_outpath, lib_read2_outpath = starmap(get_read_file, [(outfile_pre, rep, i, outfile_suf) for i in [lib_pair_list[0], lib_pair_list[1]]])
         os.makedirs(os.path.dirname(outfile_pre), exist_ok=True)
-        get_deduped_files_helper(lib_read1_path, lib_read2_path, lib_umi_path, lib_read1_outpath, lib_read2_outpath)
+        get_deduped_files_helper_starrdust(lib_read1_path, lib_read2_path, lib_umi_path, lib_read1_outpath, lib_read2_outpath)
     return
 
-def remove_dups(
+def remove_dups_with_starrdust(
     library_prefix, library_replicates, library_read_pairs, library_umi_index, library_suffix, library_deduped_prefix, library_deduped_suffix
     ):
     """
     Remove duplicates using starrdust
     """
-    get_deduped_files(library_prefix, library_replicates, library_read_pairs, library_umi_index, library_suffix, library_deduped_prefix, library_deduped_suffix)
+    get_deduped_files_starrdust(library_prefix, library_replicates, library_read_pairs, library_umi_index, library_suffix, library_deduped_prefix, library_deduped_suffix)
+    return
+
+### picard deduplication tool ###
+def remove_dups_with_picard_helper(
+    library_prefix, 
+    library_replicates, 
+    library_deduped_prefix
+    ):
+    """
+    Filter reads using samtools - bash script under the ./shell_scripts dir
+    """
+    os.makedirs(os.path.dirname(library_deduped_prefix), exist_ok=True)
+    cmd = [
+        "bash", f"{CURRENT_DIR_PATH}/shell_scripts/2_deduplicate_picard.sh", 
+        "-i", f"{library_prefix}", "-r", f"{library_replicates}", 
+        "-o", f"{library_deduped_prefix}"
+        ]
+    subprocess.run(cmd)
+    return
+
+def remove_dups_with_picard(library_prefix, library_replicates, library_deduped_prefix):
+    """filter duplicate reads"""
+    # remove duplicates with picard
+    remove_dups_with_picard_helper(library_prefix, library_replicates, library_deduped_prefix)
     return
  
 #####################
@@ -109,26 +139,23 @@ def align_reads(
 ##################
 
 def filter_reads_helper(library_prefix, library_replicates, library_filtered_prefix, 
-                        roi_file, dedup_flag):
+                        roi_file):
     """
     Filter reads using samtools - bash script under the ./shell_scripts dir
     """
     os.makedirs(os.path.dirname(library_filtered_prefix), exist_ok=True)
     cmd = [
-        "bash", f"{CURRENT_DIR_PATH}/shell_scripts/2_filter_reads.sh", 
+        "bash", f"{CURRENT_DIR_PATH}/shell_scripts/3_filter_reads.sh", 
         "-i", f"{library_prefix}", "-r", f"{library_replicates}", 
-        "-o", f"{library_filtered_prefix}", "-f", f"{roi_file}", 
-        "-d", f"{dedup_flag}"]
+        "-o", f"{library_filtered_prefix}", "-f", f"{roi_file}"
+        ]
 
     subprocess.run(cmd)
     return
 
 def filter_reads(library_aligned_prefix, library_replicates, library_filtered_prefix,
-                roi_file, umi):
+                roi_file):
     """filter bad reads"""
-    dedup = "true"
-    if umi:
-        dedup = "false"
-    # filter input reads samtools -F 2828 or 2852 (depending on the use of starrdust or picard), -f 2 -q 30
-    filter_reads_helper(library_aligned_prefix, library_replicates, library_filtered_prefix, roi_file, dedup)
+    # filter input reads samtools -F 2828 or 3852 (depending on the use of starrdust or picard), -f 2 -q 30
+    filter_reads_helper(library_aligned_prefix, library_replicates, library_filtered_prefix, roi_file)
     return
