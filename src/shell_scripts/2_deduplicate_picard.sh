@@ -13,9 +13,15 @@ do
     esac
 done
 
+picard_tmp=${OUTPUTFILE_PREFIX}_tmp
+
+mkdir -p $picard_tmp 
+
 for rep in "${BIOL_REPS[@]}"
 do
     # mark duplicates using picard if this option is true: step 1
-    picard MarkDuplicates -I ${INPUTFILE_PREFIX}_${rep}.bam -O ${OUTPUTFILE_PREFIX}_${rep}.bam -M ${OUTPUTFILE_PREFIX}_${rep}_metrics.txt --VALIDATION_STRINGENCY LENIENT --REMOVE_DUPLICATES true --VERBOSITY WARNING
+    picard MarkDuplicates -I ${INPUTFILE_PREFIX}_${rep}.bam -O ${OUTPUTFILE_PREFIX}_${rep}.bam -M ${OUTPUTFILE_PREFIX}_${rep}_metrics.txt --VALIDATION_STRINGENCY LENIENT --REMOVE_DUPLICATES true --VERBOSITY WARNING --TMP_DIR $picard_tmp
 
 done
+
+rm -r $picard_tmp

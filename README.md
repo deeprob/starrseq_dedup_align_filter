@@ -1,19 +1,35 @@
-# STARRSeq deduplicate, align and filter pipeline
+# STARRSeq analysis - deduplicate, align and filter pipeline
 
-STARRSeq sequencing data was cleaned to get a robust set of reads per region tested.
+# Pipeline steps
 
-# STEPS
+## 1. Deduplication
+**Definition:** Removal of PCR duplicates in the library
 
-1. Remove PCR duplicates using *STARRDust*, an in-house tool.
+**Tools supported:** *starrdust* or *picard*
 
-2. Align deduplicated reads to the reference genome using *BWA MEM*.
+**Description:** 
 
-3. Only keep reads that align to the reference regions and filter reads which do not pass quality control criterion using *SAMTOOLS*.
+## 2. Alignment
+**Definition:** Align reads to the reference genome
 
-# Output
+**Tools supported:** *BWA MEM*
 
-Filtered reads aligned to regions of interest
+**Description:** 
 
-# Script descriptions
+## 3. Filter
 
-1. root/src/0_dedup_align_filter.py: Runs the deduplicate, align and filter pipeline.
+**Definition:** Filter reads that do not pass certain quality control criterion using *SAMTOOLS*
+
+**Tools supported:** *samtools*
+
+**Description:** 
+
+# Required tools
+
+# Conda environment creation
+
+# How to run the pipeline
+
+1. Create metadata file
+2. Create conda environment
+3. Run 0_dedup_align_filter.py

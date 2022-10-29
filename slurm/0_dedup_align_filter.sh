@@ -5,12 +5,12 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=64
 #SBATCH --time=400:0:0
-#SBATCH --mem-per-cpu=15G
+#SBATCH --mem-per-cpu=25G
 #SBATCH --chdir /data5/deepro/starrseq/main_library/1_dedup_align_filter/src
 #SBATCH -o /data5/deepro/starrseq/main_library/1_dedup_align_filter/slurm/logs/out_%a.log
 #SBATCH -e /data5/deepro/starrseq/main_library/1_dedup_align_filter/slurm/logs/err_%a.log
 #SBATCH --exclude ramona,durga
-#SBATCH --array 12-13
+#SBATCH --array 14-15
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
