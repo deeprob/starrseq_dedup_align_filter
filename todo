@@ -1,4 +1,0 @@
-1. separate picard from filtering - done
-2. take deduplication tool argument, None will skip deduplication - done
-3. filter chromosomes random and M in samtools - done
-4. take raw data dir and store dir as separate arguments - done

@@ -1,0 +1,84 @@
+{
+    "input": {
+        "prefix": "Input_SeqReady",
+        "replicates": "A1_R1_S1 B1_R2_S2 C1_R3_S3",
+        "read_pairs": "R1_001 R3_001",
+        "umi": "R2_001",
+        "suffix": ".fastq.gz",
+        "shortform": "IN"
+    },
+    "control": {
+        "prefix": "CC",
+        "replicates": "R1_STARR_Seq_S4 R2_STARR_Seq_S5 R3_STARR_Seq_S6",
+        "read_pairs": "R1_001 R3_001",
+        "umi": "R2_001",
+        "suffix": ".fastq.gz",
+        "shortform": "CC"
+    },
+    "16p12.1": {
+        "prefix": "16P12_1",
+        "replicates": "R1_STARR_Seq_S25 R2_STARR_Seq_S26 R3_STARR_Seq_S27",
+        "read_pairs": "R1_001 R3_001",
+        "umi": "R2_001",
+        "suffix": ".fastq.gz",
+        "shortform": "16P12_1"
+    },
+    "atf2": {
+        "prefix": "ATF2",
+        "replicates": "R1_STARR_Seq_S10 R2_STARR_Seq_S11 R3_STARR_Seq_S12",
+        "read_pairs": "R1_001 R3_001",
+        "umi": "R2_001",
+        "suffix": ".fastq.gz",
+        "shortform": "ATF2"
+    },
+    "ctcf": {
+        "prefix": "CTCF",
+        "replicates": "R1_STARR_Seq_S13 R2_STARR_Seq_S14 R3_STARR_Seq_S15",
+        "read_pairs": "R1_001 R3_001",
+        "umi": "R2_001",
+        "suffix": ".fastq.gz",
+        "shortform": "CTCF"
+    },
+    "foxa1": {
+        "prefix": "FOXA1",
+        "replicates": "R1_STARR_Seq_S7 R2_STARR_Seq_S8 R3_STARR_Seq_S9",
+        "read_pairs": "R1_001 R3_001",
+        "umi": "R2_001",
+        "suffix": ".fastq.gz",
+        "shortform": "FOXA1"
+    },
+    "lef1": {
+        "prefix": "LEF1",
+        "replicates": "R1_STARR_Seq_S19 R2_STARR_Seq_S20 R3_STARR_Seq_S21",
+        "read_pairs": "R1_001 R3_001",
+        "umi": "R2_001",
+        "suffix": ".fastq.gz",
+        "shortform": "LEF1"
+    },
+    "scrt1": {
+        "prefix": "SCRT1",
+        "replicates": "R1_STARR_Seq_S16 R2_STARR_Seq_S17 R3_STARR_Seq_S18",
+        "read_pairs": "R1_001 R3_001",
+        "umi": "R2_001",
+        "suffix": ".fastq.gz",
+        "shortform": "SCRT1"
+    },
+    "tcf7l2": {
+        "prefix": "TCF7L2",
+        "replicates": "R1_STARR_Seq_S22 R2_STARR_Seq_S23 R3_STARR_Seq_S24",
+        "read_pairs": "R1_001 R3_001",
+        "umi": "R2_001",
+        "suffix": ".fastq.gz",
+        "shortform": "TCF7L2"
+    },
+    "genome": {
+        "ref_fasta": "/data5/deepro/genomes/hg38/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta",
+        "ref_twobit": "/data5/deepro/genomes/hg38/hg38.2bit",
+        "chrom_sizes": "/data5/deepro/genomes/hg38/GRCh38.chrom.sizes.simple.sorted"
+    },
+    "roi": {
+        "sorted": "/data5/deepro/starrseq/main_library/0_region_selection/data/master/master.bed",
+        "filtered": "/data5/deepro/starrseq/main_library/2_quality_control_lib/data/master/IN/master_filtered.bed",
+        "window": "/data5/deepro/starrseq/main_library/2_quality_control_lib/data/window/IN/master_filtered_windows.bed"
+    }
+}
